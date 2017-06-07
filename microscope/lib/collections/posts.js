@@ -21,6 +21,13 @@ validatePost = function (post) {
     return errors;
 }
 
+Posts.deny({
+    update: function(userId, post, fieldNames, modifier) {
+        var errors = validatePost(modifier.$set);
+        return errors.title || errors.url;
+    }
+});
+
 Meteor.methods({
     
     postInsert: function(postAttributes) {
@@ -48,7 +55,9 @@ Meteor.methods({
             author: user.username,
             submitted: new Date()
         });
+        
         var postId = Posts.insert(post);
+        
         return {
             _id: postId
         };
