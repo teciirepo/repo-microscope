@@ -5,7 +5,8 @@ Meteor.methods({
         check(this.userId, String);    
         check(commentAttributes, {      
             postId: String,      
-            body: String    });    
+            body: String    
+        });    
         var user = Meteor.user();    
         var post = Posts.findOne(commentAttributes.postId);    
         if (!post)      
