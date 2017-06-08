@@ -6,11 +6,14 @@ Meteor.methods({
         check(commentAttributes, {      
             postId: String,      
             body: String    
-        });    
+        });
+        
         var user = Meteor.user();    
         var post = Posts.findOne(commentAttributes.postId);    
+        
         if (!post)      
             throw new Meteor.Error('invalid-comment', 'You must comment on a post');    
+        
         comment = _.extend(commentAttributes, {      
             userId: user._id,      
             author: user.username,      
@@ -26,6 +29,5 @@ Meteor.methods({
         createCommentNotification(comment);
         
         return comment._id;
- 
     }
 });

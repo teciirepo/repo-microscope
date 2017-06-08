@@ -12,6 +12,13 @@ Posts.deny({
     }
 });
 
+Posts.deny({
+    update: function(userId, post, fieldNames, modifier) {
+        var errors = validatePost(modifier.$set);
+        return errors.title || errors.url;
+    }
+});
+
 validatePost = function (post) {
     var errors = {};
     if (!post.title)
@@ -21,17 +28,10 @@ validatePost = function (post) {
     return errors;
 }
 
-Posts.deny({
-    update: function(userId, post, fieldNames, modifier) {
-        var errors = validatePost(modifier.$set);
-        return errors.title || errors.url;
-    }
-});
-
 Meteor.methods({
     
     postInsert: function(postAttributes) {
-        check(Meteor.userId(), String);
+        check(this.userId, String);
         check(postAttributes, {
             title: String,
             url: String
